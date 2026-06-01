@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#7a53dc" />
+    <meta
+      name="description"
+      content="Jardín de Cumplidos: una experiencia interactiva para plantar flores y recibir mensajes bonitos."
+    />
+    <title>Jardín de Cumplidos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;900&family=Playwrite+CU:wght@300;400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script defer src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script defer src="supabase-config.js"></script>
+    <script defer src="script.js"></script>
+  </head>
+  <body>
+    <main class="garden" aria-labelledby="page-title">
+      <canvas class="magic-canvas" id="magicCanvas" aria-hidden="true"></canvas>
+
+      <div class="aurora" aria-hidden="true"></div>
+      <div class="sunset" aria-hidden="true"></div>
+      <div class="distant-hills" aria-hidden="true"></div>
+      <div class="lake-glow" aria-hidden="true"></div>
+
+      <div class="branch branch-left" aria-hidden="true"></div>
+      <div class="branch branch-right" aria-hidden="true"></div>
+      <div class="foreground foreground-left" aria-hidden="true"></div>
+      <div class="foreground foreground-right" aria-hidden="true"></div>
+
+      <section class="hud" aria-label="Estado del jardín">
+        <div class="counter-card" aria-live="polite">
+          <span class="counter-bloom" aria-hidden="true">🌸</span>
+          <span>
+            <span class="counter-label">Flores plantadas</span>
+            <strong id="flowerCount">0</strong>
+          </span>
+        </div>
+        <button class="sound-button" id="soundToggle" type="button" aria-pressed="false">
+          <span aria-hidden="true">♪</span>
+          <span class="sr-only">Activar música</span>
+        </button>
+      </section>
+
+      <section class="hero">
+        <p class="sparkle-line" aria-hidden="true">✦ ✧ ✦</p>
+        <h1 id="page-title">
+          <span>Jardín de</span>
+          <strong>Cumplidos</strong>
+        </h1>
+        <p class="subtitle">Toca la flor para recibir algo bonito</p>
+      </section>
+
+      <section class="world" aria-label="Jardín mágico">
+        <div class="butterfly butterfly-one" aria-hidden="true">
+          <span></span>
+        </div>
+        <div class="butterfly butterfly-two" aria-hidden="true">
+          <span></span>
+        </div>
+
+        <div class="planted-field" id="plantedField" aria-hidden="true"></div>
+
+        <button class="main-flower" id="mainFlower" type="button" aria-label="Tocar la flor mágica">
+          <span class="flower-aura" aria-hidden="true"></span>
+          <svg viewBox="0 0 260 320" role="img" aria-labelledby="flowerTitle">
+            <title id="flowerTitle">Flor mágica rosa</title>
+            <defs>
+              <radialGradient id="petalGradient" cx="45%" cy="35%" r="70%">
+                <stop offset="0%" stop-color="#fff5fb" />
+                <stop offset="42%" stop-color="#ff8fd5" />
+                <stop offset="100%" stop-color="#ed4eb5" />
+              </radialGradient>
+              <radialGradient id="centerGradient" cx="45%" cy="35%" r="65%">
+                <stop offset="0%" stop-color="#fff9bf" />
+                <stop offset="48%" stop-color="#ffd65f" />
+                <stop offset="100%" stop-color="#ed812b" />
+              </radialGradient>
+              <linearGradient id="stemGradient" x1="0" x2="1">
+                <stop offset="0%" stop-color="#315f2e" />
+                <stop offset="45%" stop-color="#75b044" />
+                <stop offset="100%" stop-color="#204827" />
+              </linearGradient>
+              <filter id="softGlow" x="-60%" y="-60%" width="220%" height="220%">
+                <feGaussianBlur stdDeviation="4" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+            <g class="stem">
+              <path d="M130 153 C125 196 124 241 129 302" stroke="url(#stemGradient)" stroke-width="17" stroke-linecap="round" />
+              <path class="leaf leaf-left" d="M125 234 C75 202 52 230 40 266 C76 270 111 263 128 241Z" />
+              <path class="leaf leaf-right" d="M135 231 C185 198 210 228 222 263 C184 272 150 261 132 240Z" />
+            </g>
+            <g class="petals" filter="url(#softGlow)">
+              <ellipse class="petal" cx="130" cy="86" rx="32" ry="63" fill="url(#petalGradient)" transform="rotate(0 130 148)" />
+              <ellipse class="petal" cx="130" cy="86" rx="32" ry="63" fill="url(#petalGradient)" transform="rotate(42 130 148)" />
+              <ellipse class="petal" cx="130" cy="86" rx="32" ry="63" fill="url(#petalGradient)" transform="rotate(84 130 148)" />
+              <ellipse class="petal" cx="130" cy="86" rx="32" ry="63" fill="url(#petalGradient)" transform="rotate(126 130 148)" />
+              <ellipse class="petal" cx="130" cy="86" rx="32" ry="63" fill="url(#petalGradient)" transform="rotate(180 130 148)" />
+              <ellipse class="petal" cx="130" cy="86" rx="32" ry="63" fill="url(#petalGradient)" transform="rotate(234 130 148)" />
+              <ellipse class="petal" cx="130" cy="86" rx="32" ry="63" fill="url(#petalGradient)" transform="rotate(276 130 148)" />
+              <ellipse class="petal" cx="130" cy="86" rx="32" ry="63" fill="url(#petalGradient)" transform="rotate(318 130 148)" />
+            </g>
+            <g class="flower-center">
+              <circle cx="130" cy="148" r="24" fill="url(#centerGradient)" />
+              <circle cx="130" cy="148" r="10" fill="#fff7b6" />
+              <g class="stamens" stroke="#fff0a8" stroke-width="3" stroke-linecap="round">
+                <path d="M130 132 L130 111" />
+                <path d="M119 136 L103 119" />
+                <path d="M142 136 L159 119" />
+                <path d="M113 150 L91 148" />
+                <path d="M147 150 L169 148" />
+              </g>
+              <g fill="#ffe36e">
+                <circle cx="130" cy="111" r="4" />
+                <circle cx="103" cy="119" r="4" />
+                <circle cx="159" cy="119" r="4" />
+                <circle cx="91" cy="148" r="4" />
+                <circle cx="169" cy="148" r="4" />
+              </g>
+            </g>
+          </svg>
+          <span class="touch-note" aria-hidden="true">¡Tócame!</span>
+        </button>
+
+        <div class="message-card" id="messageCard" aria-live="polite">
+          <span class="mini-butterfly" aria-hidden="true"></span>
+          <p id="complimentText">Tu mensaje aparecerá aquí.</p>
+          <span class="message-ornament" aria-hidden="true"></span>
+        </div>
+      </section>
+
+      <p class="scroll-hint" aria-hidden="true">⌄ Desliza o toca la flor ⌄</p>
+    </main>
+  </body>
+</html>
